@@ -3,9 +3,9 @@ import reactLogo from './assets/react.svg'
 import viteLogo from '/vite.svg'
 import './App.css'
 import WelcomeMessage from './WelcomeMessage.jsx'
-import Header from './src/components/Header.jsx'
-import MainContent from './src/MainContent.jsx'
-import Footer from './src/components/Footer.jsx'
+import Header from './components/Header.jsx'
+import MainContent from './components/MainContent.jsx'
+import Footer from './components/Footer.jsx'
 
 function App() {
   const [count, setCount] = useState(0)
