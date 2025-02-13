@@ -2,7 +2,10 @@ import { useState } from 'react'
 import reactLogo from './assets/react.svg'
 import viteLogo from '/vite.svg'
 import './App.css'
-import WelcomeMessage from './components/WelcomeMessage.jsx.jsx'
+import WelcomeMessage from './WelcomeMessage.jsx'
+import Header from './Header.jsx'
+import MainContent from './MainContent.jsx'
+import Footer from './Footer.jsx'
 
 function App() {
   const [count, setCount] = useState(0)
@@ -10,6 +13,9 @@ function App() {
   return (
     <>
       <div>
+        <Header />
+        <MainContent />
+        <Footer />
         <WelcomeMessage />
         <a href="https://vite.dev" target="_blank">
           <img src={viteLogo} className="logo" alt="Vite logo" />
