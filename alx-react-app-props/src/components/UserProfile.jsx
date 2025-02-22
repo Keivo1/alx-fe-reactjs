@@ -3,7 +3,7 @@ import UserInfo from "./UserInfo";
 import UserContext from "./UserContext";
 
 function ProfilePage() {
-  const userData = useContext(UserContext);
+  const userData = React.useContext(UserContext);
   return <UserInfo userData={userData} />;
 }
 
