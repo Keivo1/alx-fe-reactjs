@@ -2,7 +2,6 @@ import React, { useState } from "react";
 import AddTodoForm from "./AddTodoForm";
 import TodoItem from "./TodoItem";
 
-
 const TodoList = () => {
     const [todos, setTodos] = useState([
       { id: 1, text: "Learn React", completed: false },
