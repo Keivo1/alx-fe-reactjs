@@ -4,33 +4,37 @@ const AddRecipeForm = ({ onAddRecipe }) => {
   const [title, setTitle] = useState("");
   const [ingredients, setIngredients] = useState("");
   const [steps, setSteps] = useState("");
-  const [error, setError] = useState("");
+  const [errors, setErrors] = useState({});
+
+  const validate = () => {
+    let tempErrors = {};
+    if (!title.trim()) tempErrors.title = "Title is required.";
+    if (!ingredients.trim()) tempErrors.ingredients = "Ingredients are required.";
+    if (!steps.trim()) tempErrors.steps = "Preparation steps are required.";
+
+    const ingredientsArray = ingredients.split(",").map((item) => item.trim());
+    if (ingredientsArray.length < 2) tempErrors.ingredients = "Please enter at least two ingredients.";
+
+    setErrors(tempErrors);
+    return Object.keys(tempErrors).length === 0;
+  };
 
   const handleSubmit = (e) => {
     e.preventDefault();
-
-    if (!title.trim() || !ingredients.trim() || !steps.trim()) {
-      setError("All fields are required.");
-      return;
-    }
-
-    const ingredientsArray = ingredients.split(",").map((item) => item.trim());
-    if (ingredientsArray.length < 2) {
-      setError("Please enter at least two ingredients.");
-      return;
-    }
-
-    onAddRecipe({ title, ingredients: ingredientsArray, steps });
+    if (!validate()) return;
+    onAddRecipe({ title, ingredients: ingredients.split(","), steps });
     setTitle("");
     setIngredients("");
     setSteps("");
-    setError("");
+    setErrors({});
   };
 
   return (
     <div className="max-w-lg mx-auto bg-white p-6 rounded-lg shadow-md">
       <h2 className="text-2xl font-semibold mb-4">Add a New Recipe</h2>
-      {error && <p className="text-red-500 text-sm mb-4">{error}</p>}
+      {Object.values(errors).map((error, index) => (
+        <p key={index} className="text-red-500 text-sm mb-2">{error}</p>
+      ))}
       <form onSubmit={handleSubmit} className="space-y-4">
         <div>
           <label className="block text-sm font-medium">Recipe Title</label>
