@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { fetchAdvancedSearch } from '../services/githubService';
+import { fetchAdvancedSearch, fetchUserData } from '../services/githubService';
 
 const Search = () => {
   const [username, setUsername] = useState('');
@@ -25,8 +25,18 @@ const Search = () => {
         minRepos,
         page: 1,
       });
-      setResults(users);
-      setHasMore(hasMorePages);
+
+      if (users.length > 0) {
+        setResults(users);
+        setHasMore(hasMorePages);
+      } else if (username) {
+        
+        const singleUser = await fetchUserData(username);
+        setResults([singleUser]);
+        setHasMore(false);
+      } else {
+        setError('Looks like we cant find the user');
+      }
     } catch (err) {
       setError('Looks like we cant find the user');
     } finally {
