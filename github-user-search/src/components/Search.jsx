@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { fetchAdvancedSearch } from '../services/githubService';
+import { fetchAdvancedSearch, fetchUserData } from '../services/githubService'; // ✅ include fetchUserData
 
 const Search = () => {
   const [username, setUsername] = useState('');
@@ -10,6 +10,7 @@ const Search = () => {
   const [loading, setLoading] = useState(false);
   const [page, setPage] = useState(1);
   const [hasMore, setHasMore] = useState(false);
+  const [selectedUserDetails, setSelectedUserDetails] = useState(null); // ✅ for detailed view
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -17,13 +18,14 @@ const Search = () => {
     setResults([]);
     setPage(1);
     setLoading(true);
+    setSelectedUserDetails(null); // clear previous selection
 
     try {
       const { users, hasMorePages } = await fetchAdvancedSearch({ username, location, minRepos, page: 1 });
       setResults(users);
       setHasMore(hasMorePages);
     } catch (err) {
-      setError('Looks like we cant find the user');
+      setError('Looks like we can’t find the user');
     } finally {
       setLoading(false);
     }
@@ -41,6 +43,16 @@ const Search = () => {
       setError('Failed to load more users.');
     } finally {
       setLoading(false);
+    }
+  };
+
+  const handleViewDetails = async (login) => {
+    try {
+      setSelectedUserDetails(null);
+      const userDetails = await fetchUserData(login);
+      setSelectedUserDetails(userDetails);
+    } catch (err) {
+      setError('Failed to fetch user details.');
     }
   };
 
@@ -77,7 +89,6 @@ const Search = () => {
       {loading && <p className="mt-4 text-gray-600">Loading...</p>}
       {error && !loading && <p className="mt-4 text-red-500">{error}</p>}
 
-     
       <div className="mt-6 space-y-4">
         {results.map((user) => (
           <div key={user.id} className="flex items-center gap-4 p-4 border rounded shadow-sm">
@@ -87,10 +98,28 @@ const Search = () => {
               <a href={user.html_url} className="text-blue-500 hover:underline" target="_blank" rel="noreferrer">
                 View Profile
               </a>
+              <button
+                onClick={() => handleViewDetails(user.login)}
+                className="ml-4 text-sm bg-gray-200 hover:bg-gray-300 text-gray-800 px-3 py-1 rounded"
+              >
+                View Details
+              </button>
             </div>
           </div>
         ))}
       </div>
+
+      {selectedUserDetails && (
+        <div className="mt-8 p-4 border rounded bg-gray-50 shadow">
+          <h3 className="text-xl font-bold mb-2">User Details</h3>
+          <p><strong>Name:</strong> {selectedUserDetails.name || 'N/A'}</p>
+          <p><strong>Location:</strong> {selectedUserDetails.location || 'N/A'}</p>
+          <p><strong>Bio:</strong> {selectedUserDetails.bio || 'N/A'}</p>
+          <p><strong>Public Repos:</strong> {selectedUserDetails.public_repos}</p>
+          <p><strong>Followers:</strong> {selectedUserDetails.followers}</p>
+          <p><strong>Following:</strong> {selectedUserDetails.following}</p>
+        </div>
+      )}
 
       {hasMore && (
         <div className="mt-6 text-center">
