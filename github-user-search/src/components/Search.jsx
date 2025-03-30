@@ -17,6 +17,7 @@ const Search = () => {
       const data = await fetchUserData(username);
       setUserData(data);
     } catch (err) {
+ 
       setError('Looks like we can’t find the user');
     } finally {
       setLoading(false);
@@ -40,9 +41,10 @@ const Search = () => {
 
       {loading && <p className="text-gray-600">Loading...</p>}
 
+  
       {error && !loading && <p className="text-red-500">{error}</p>}
 
-     
+   
       {userData && !loading && (
         <div className="bg-white p-4 rounded shadow text-center">
           <img src={userData.avatar_url} alt={userData.login} className="w-24 h-24 rounded-full mx-auto mb-3" />
