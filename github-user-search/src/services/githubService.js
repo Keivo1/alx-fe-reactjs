@@ -17,8 +17,23 @@ export const fetchAdvancedSearch = async ({ username, location, minRepos }) => {
       },
     });
 
-    return response.data.items; 
+    return response.data.items;
   } catch (error) {
     throw new Error('Search failed');
+  }
+};
+
+
+export const fetchUserData = async (username) => {
+  try {
+    const response = await axios.get(`${GITHUB_API}/users/${username}`, {
+      headers: {
+        Authorization: `Bearer ${import.meta.env.VITE_APP_GITHUB_API_KEY}`,
+      },
+    });
+
+    return response.data;
+  } catch (error) {
+    throw new Error(`Failed to fetch data for user "${username}"`);
   }
 };
