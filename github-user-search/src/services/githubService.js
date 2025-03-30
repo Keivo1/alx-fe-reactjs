@@ -1,9 +1,7 @@
 import axios from 'axios';
 
-const GITHUB_API = 'https://api.github.com/search/users';
-
 export const fetchAdvancedSearch = async ({ username, location, minRepos, page = 1 }) => {
-  // Construct the query string for advanced GitHub search
+
   let query = '';
 
   if (username) query += `${username} in:login `;
@@ -11,9 +9,8 @@ export const fetchAdvancedSearch = async ({ username, location, minRepos, page =
   if (minRepos) query += `repos:>=${minRepos}`;
 
   try {
-    const response = await axios.get(`${GITHUB_API}`, {
+    const response = await axios.get(`https://api.github.com/search/users?q=${encodeURIComponent(query.trim())}`, {
       params: {
-        q: query.trim(),
         per_page: 10,
         page,
       },
