@@ -1,7 +1,6 @@
 import axios from 'axios';
 
 export const fetchAdvancedSearch = async ({ username, location, minRepos, page = 1 }) => {
-
   let query = '';
 
   if (username) query += `${username} in:login `;
@@ -26,5 +25,18 @@ export const fetchAdvancedSearch = async ({ username, location, minRepos, page =
     return { users, hasMorePages };
   } catch (error) {
     throw new Error('GitHub API Error');
+  }
+};
+
+export const fetchUserData = async (username) => {
+  try {
+    const response = await axios.get(`https://api.github.com/users/${username}`, {
+      headers: {
+        Authorization: `Bearer ${import.meta.env.VITE_APP_GITHUB_API_KEY}`,
+      },
+    });
+    return response.data;
+  } catch (error) {
+    throw new Error('User not found');
   }
 };
