@@ -1,13 +1,10 @@
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import HomePage from './components/HomePage';
+import Search from './components/Search';
 
 function App() {
   return (
-    <Router>
-      <Routes>
-        <Route path="/" element={<HomePage />} />
-      </Routes>
-    </Router>
+    <div className="min-h-screen bg-gray-100 flex items-center justify-center">
+      <Search />
+    </div>
   );
 }
 
